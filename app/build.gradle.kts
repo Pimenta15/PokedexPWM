@@ -66,4 +66,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.lifecycleViewModelCompose)
+    // Retrofit & Gson
+    implementation(libs.retrofit)
+    implementation(libs.gsonConverter)
+
+    // Coroutines (para chamadas assíncronas)
+    implementation(libs.coroutines)
+
+    // Coil (para carregar imagens)
+    implementation(libs.coil)
 }
