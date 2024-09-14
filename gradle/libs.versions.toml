@@ -33,6 +33,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gson" }
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coilCompose = { group = "io.coil-kt", name = "coil-compose", version = "2.2.2" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

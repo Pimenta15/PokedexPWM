@@ -18,9 +18,18 @@ class PokemonViewModel : ViewModel() {
 
     private fun getPokemonList() {
         viewModelScope.launch {
-            val response = RetrofitInstance.api.getPokemonList(limit = 151, offset = 0)
+            val response = RetrofitInstance.api.getPokemonList(limit = 151, offset = 0) //905 / 1025
             if (response.isSuccessful) {
-                response.body()?.results?.let { list -> pokemonList.addAll(list)
+                response.body()?.results?.let { list ->
+                    // Gerando a lista de Pokémon com o nome e a URL da imagem
+                    val updatedList = list.mapIndexed { index, pokemonResult ->
+                        val pokemonId = index + 1
+                        Pokemon(
+                            name = pokemonResult.name,
+                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png"
+                        )
+                    }
+                    pokemonList.addAll(updatedList)
                 }
             }
         }
