@@ -18,16 +18,28 @@ class PokemonViewModel : ViewModel() {
 
     private fun getPokemonList() {
         viewModelScope.launch {
-            val response = RetrofitInstance.api.getPokemonList(limit = 151, offset = 0) //905 / 1025
+            val response = RetrofitInstance.api.getPokemonList(limit = 151, offset = 0)
             if (response.isSuccessful) {
                 response.body()?.results?.let { list ->
-                    // Gerando a lista de Pokémon com o nome e a URL da imagem
+                    // Gerando a lista de Pokémon com nome e imagem
                     val updatedList = list.mapIndexed { index, pokemonResult ->
                         val pokemonId = index + 1
-                        Pokemon(
-                            name = pokemonResult.name,
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png"
-                        )
+                        val pokemonDetails = RetrofitInstance.api.getPokemonDetails(pokemonId) // Chama os detalhes de cada Pokémon
+
+                        if (pokemonDetails.isSuccessful) {
+                            val types = pokemonDetails.body()?.types?.map { it.type.name } ?: listOf("unknown")
+                            Pokemon(
+                                name = pokemonResult.name,
+                                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png",
+                                types = types
+                            )
+                        } else {
+                            Pokemon(
+                                name = pokemonResult.name,
+                                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png",
+                                types = listOf("unknown")
+                            )
+                        }
                     }
                     pokemonList.addAll(updatedList)
                 }
@@ -35,3 +47,4 @@ class PokemonViewModel : ViewModel() {
         }
     }
 }
+
