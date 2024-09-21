@@ -1,5 +1,6 @@
 package com.example.pokedexpwm
 
+import PokemonViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter // Para carregar imagens
-import com.example.pokedexpwm.viewmodel.PokemonViewModel
+
 import getTypeColor
 
 @Composable

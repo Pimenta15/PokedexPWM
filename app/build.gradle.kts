@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.kapt) // Aqui você adiciona o plugin kapt
 }
+
 
 android {
     namespace = "com.example.pokedexpwm"
@@ -78,6 +80,10 @@ dependencies {
     // Coil (para carregar imagens)
     implementation(libs.coil)
     implementation(libs.coilCompose)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
 
 
 }
