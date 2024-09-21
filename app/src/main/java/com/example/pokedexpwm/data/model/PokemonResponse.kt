@@ -26,3 +26,15 @@ data class PokemonListResponse(
     val results: List<PokemonResult>
 )
 
+data class FlavorTextEntry(
+    val flavor_text: String,
+    val language: Language
+)
+
+data class Language(
+    val name: String
+)
+
+data class PokemonFlavorTextResponse(
+    val flavor_text_entries: List<FlavorTextEntry>
+)

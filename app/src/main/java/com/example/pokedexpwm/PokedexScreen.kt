@@ -1,10 +1,10 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -13,13 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.pokedexpwm.viewmodel.PokemonViewModel
 
 @Composable
-fun PokedexScreen(viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     val pokemonList = viewModel.pokemonList
 
     LazyVerticalGrid(
@@ -29,21 +29,24 @@ fun PokedexScreen(viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.com
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        itemsIndexed(pokemonList) { index, pokemon ->
-            // Passa o número do Pokémon (index + 1)
-            PokemonItem(pokemon = pokemon, pokemonNumber = index + 1)
+        items(pokemonList) { pokemon ->
+            PokemonItem(pokemon = pokemon, onClick = {
+                viewModel.selectPokemon(pokemon)  // Seleciona o Pokémon
+                navController.navigate("pokemonDetailScreen")  // Navega para a tela de detalhes
+            })
         }
     }
 }
 
 @Composable
-fun PokemonItem(pokemon: com.example.pokedexpwm.data.model.Pokemon, pokemonNumber: Int) {
+fun PokemonItem(pokemon: com.example.pokedexpwm.data.model.Pokemon, onClick: () -> Unit) {
     val backgroundColor = getTypeColor(pokemon.types.firstOrNull() ?: "unknown")
 
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,7 +66,7 @@ fun PokemonItem(pokemon: com.example.pokedexpwm.data.model.Pokemon, pokemonNumbe
 
             // Nome do Pokémon com o número (#Número Nome)
             Text(
-                text = "# $pokemonNumber \t ${pokemon.name.capitalize()}",
+                text = "# ${pokemon.id} \t ${pokemon.name.capitalize()}",
                 color = Color.White,
                 maxLines = 1,
                 modifier = Modifier

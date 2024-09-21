@@ -1,5 +1,6 @@
 package com.example.pokedexpwm.data.network
 
+import com.example.pokedexpwm.data.model.PokemonFlavorTextResponse
 import com.example.pokedexpwm.data.model.PokemonListResponse
 import com.example.pokedexpwm.data.model.PokemonResponse
 import retrofit2.Response
@@ -18,7 +19,14 @@ interface PokeApiService {
     suspend fun getPokemonDetails(
         @Path("id") id: Int
     ): Response<PokemonDetailsResponse>
+
+    @GET("pokemon-species/{id}")
+    suspend fun getPokemonFlavorText(
+        @Path("id") pokemonId: Int
+    ): PokemonFlavorTextResponse
 }
+
+
 
 data class PokemonDetailsResponse(
     val types: List<TypeSlot>
