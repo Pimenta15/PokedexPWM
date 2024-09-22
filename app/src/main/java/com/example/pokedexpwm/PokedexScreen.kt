@@ -3,37 +3,113 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-
+import com.example.pokedexpwm.R
 
 @Composable
 fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     val pokemonList = viewModel.pokemonList
+    val isLoading = viewModel.isLoading.value
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(pokemonList) { pokemon ->
-            PokemonItem(pokemon = pokemon, onClick = {
-                viewModel.selectPokemon(pokemon)  // Seleciona o Pokémon
-                navController.navigate("pokemonDetailScreen")  // Navega para a tela de detalhes
-            })
+    // Estado para contar os cliques no logo
+    var clickCount by remember { mutableStateOf(0) }
+
+    if (isLoading) {
+        // Exibir a tela de carregamento
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.pokemonlogo),  // Substitua com o nome correto do seu arquivo
+                contentDescription = "Pokemon Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .graphicsLayer(alpha = 1.0f)
+                    .padding(16.dp)
+                    .height(150.dp),  // Ajuste o tamanho conforme necessário
+                contentScale = ContentScale.Fit
+            )
+
+            // Imagem de fundo (pokébola) com opacidade reduzida
+            Image(
+                painter = painterResource(id = R.drawable.pokebola),  // Substitua com o nome correto do seu arquivo
+                contentDescription = "Pokebola de fundo",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(alpha = 0.3f), // Define a opacidade
+                contentScale = ContentScale.Crop  // Ajusta a imagem para cobrir toda a tela
+            )
+        }
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(30.dp)
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+        }
+    } else {
+        // Imagem de fundo (pokébola) com opacidade reduzida
+        Image(
+            painter = painterResource(id = R.drawable.pokebola),  // Substitua com o nome correto do seu arquivo
+            contentDescription = "Pokebola de fundo",
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(alpha = 0.3f), // Define a opacidade
+            contentScale = ContentScale.Crop  // Ajusta a imagem para cobrir toda a tela
+        )
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(8.dp),
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Adiciona a logo como um item que ocupa toda a largura da tela
+            item(span = { GridItemSpan(2) }) {
+                Image(
+                    painter = painterResource(id = R.drawable.pokemonlogo),  // Substitua com o nome correto do seu arquivo
+                    contentDescription = "Pokemon Logo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            clickCount++
+                            if (clickCount == 10) {
+                                clickCount = 0
+                                navController.navigate("easterEggScreen")  // Navega para a tela de Easter Egg
+                            }
+                        }
+                        .padding(16.dp)
+                        .height(150.dp),  // Ajuste o tamanho conforme necessário
+                    contentScale = ContentScale.Fit
+                )
+            }
+
+            // Lista de Pokémons
+            items(pokemonList) { pokemon ->
+                PokemonItem(pokemon = pokemon, onClick = {
+                    viewModel.selectPokemon(pokemon)  // Seleciona o Pokémon
+                    navController.navigate("pokemonDetailScreen")  // Navega para a tela de detalhes
+                })
+            }
         }
     }
 }
@@ -80,6 +156,7 @@ fun PokemonItem(pokemon: com.example.pokedexpwm.data.model.Pokemon, onClick: () 
         }
     }
 }
+
 fun getTypeColor(type: String): Color {
     return when (type.lowercase()) {
         "fire" -> Color(0xFFCE4545)  // Laranja/Vermelho para fogo
@@ -102,5 +179,3 @@ fun getTypeColor(type: String): Color {
         else -> Color(0xFF9E9E9E)  // Cinza padrão para tipos desconhecidos
     }
 }
-
-

@@ -16,70 +16,88 @@ class PokemonViewModel(private val pokemonDao: PokemonDao) : ViewModel() {
     var selectedPokemon = mutableStateOf<Pokemon?>(null)
         private set
 
+    // Estado de carregamento
+    var isLoading = mutableStateOf(true)
+        private set
     init {
         getPokemonList()
     }
 
     private fun getPokemonList() {
+        val limit = 151
         viewModelScope.launch {
             // Tenta carregar os Pokémon do banco de dados
-            val cachedPokemon = pokemonDao.getAllPokemon()
+            try {
 
-            if (cachedPokemon.isEmpty()) {
-                // Se o banco estiver vazio, pega da API
-                val response = RetrofitInstance.api.getPokemonList(limit = 151, offset = 0)
-                if (response.isSuccessful) {
-                    response.body()?.results?.let { list ->
-                        val updatedList = list.mapIndexed { index, pokemonResult ->
-                            val pokemonId = index + 1
-                            val pokemonDetails = RetrofitInstance.api.getPokemonDetails(pokemonId)
 
-                            if (pokemonDetails.isSuccessful) {
-                                val types = pokemonDetails.body()?.types?.map { it.type.name } ?: listOf("unknown")
+                val cachedPokemon = pokemonDao.getAllPokemon()
 
-                                val flavorTextResponse = RetrofitInstance.api.getPokemonFlavorText(pokemonId)
-                                val englishFlavorText = flavorTextResponse.flavor_text_entries
-                                    .filter { it.language.name == "en" }
-                                    .map { it.flavor_text.replace("\\n|\\f|\\t".toRegex(), " ") }
-                                    .distinct()
+                if (cachedPokemon.isEmpty()|| cachedPokemon.size < limit) {
+                    // Se o banco estiver vazio, pega da API
+                    val response = RetrofitInstance.api.getPokemonList(limit = limit, offset = 0)
+                    if (response.isSuccessful) {
+                        response.body()?.results?.let { list ->
+                            val updatedList = list.mapIndexed { index, pokemonResult ->
+                                val pokemonId = index + 1
+                                val pokemonDetails =
+                                    RetrofitInstance.api.getPokemonDetails(pokemonId)
 
-                                val pokemon = Pokemon(
-                                    id = pokemonId,
-                                    name = pokemonResult.name,
-                                    imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png",
-                                    types = types,
-                                    flavor_text = englishFlavorText
-                                )
+                                if (pokemonDetails.isSuccessful) {
+                                    val types = pokemonDetails.body()?.types?.map { it.type.name }
+                                        ?: listOf("unknown")
 
-                                // Insere no banco de dados
-                                val pokemonEntity = PokemonEntity(
-                                    id = pokemonId,
-                                    name = pokemon.name,
-                                    imageUrl = pokemon.imageUrl,
-                                    types = types,
-                                    flavorText = englishFlavorText
-                                )
-                                pokemonDao.insertPokemon(listOf(pokemonEntity)) // Salva no banco
+                                    val flavorTextResponse =
+                                        RetrofitInstance.api.getPokemonFlavorText(pokemonId)
+                                    val englishFlavorText = flavorTextResponse.flavor_text_entries
+                                        .filter { it.language.name == "en" }
+                                        .map {
+                                            it.flavor_text.replace(
+                                                "\\n|\\f|\\t".toRegex(),
+                                                " "
+                                            )
+                                        }
+                                        .distinct()
 
-                                pokemon
-                            } else {
-                                Pokemon(
-                                    id = pokemonId,
-                                    name = pokemonResult.name,
-                                    imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png",
-                                    types = listOf("unknown"),
-                                    flavor_text = listOf("Texto não disponível")
-                                )
+                                    val pokemon = Pokemon(
+                                        id = pokemonId,
+                                        name = pokemonResult.name,
+                                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png",
+                                        types = types,
+                                        flavor_text = englishFlavorText
+                                    )
+
+                                    // Insere no banco de dados
+                                    val pokemonEntity = PokemonEntity(
+                                        id = pokemonId,
+                                        name = pokemon.name,
+                                        imageUrl = pokemon.imageUrl,
+                                        types = types,
+                                        flavorText = englishFlavorText
+                                    )
+                                    pokemonDao.insertPokemon(listOf(pokemonEntity)) // Salva no banco
+
+                                    pokemon
+                                } else {
+                                    Pokemon(
+                                        id = pokemonId,
+                                        name = pokemonResult.name,
+                                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$pokemonId.png",
+                                        types = listOf("unknown"),
+                                        flavor_text = listOf("Texto não disponível")
+                                    )
+                                }
                             }
-                        }
 
-                        pokemonList.addAll(updatedList)
+                            pokemonList.addAll(updatedList)
+                        }
                     }
+                } else {
+                    // Carrega os Pokémon do banco de dados
+                    val pokemonFromDb = cachedPokemon.map { it.toPokemon() }
+                    pokemonList.addAll(pokemonFromDb)
                 }
-            } else {
-                // Carrega os Pokémon do banco de dados
-                val pokemonFromDb = cachedPokemon.map { it.toPokemon() }
-                pokemonList.addAll(pokemonFromDb)
+            }finally {
+                isLoading.value = false
             }
         }
     }

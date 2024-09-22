@@ -41,7 +41,10 @@ fun PokedexApp(
             PokedexScreen(navController = navController, viewModel = viewModel)
         }
         composable("pokemonDetailScreen") {
-            PokemonDetailScreen(viewModel = viewModel)
+            PokemonDetailScreen(navController,viewModel = viewModel)
+        }
+        composable("easterEggScreen") {
+            easterEggScreen(navController,viewModel = viewModel)
         }
     }
 }
