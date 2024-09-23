@@ -1,7 +1,6 @@
-package com.example.pokedexpwm
+package com.example.pokedexpwm.Screens
 
 import PokemonViewModel
-import android.content.ClipData.Item
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter // Para carregar imagens
+import com.example.pokedexpwm.R
 
 import getTypeColor
 
@@ -78,7 +78,7 @@ fun PokemonDetailScreen(navController: NavController, viewModel: PokemonViewMode
                     Image(
                         painter = painter,
                         contentDescription = null,
-                        modifier = Modifier.size(300.dp) // Ajuste o tamanho da imagem
+                        modifier = Modifier.size(200.dp) // Ajuste o tamanho da imagem
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.pokedexpwm.R
@@ -34,25 +33,23 @@ fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = an
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.pokemonlogo),  // Substitua com o nome correto do seu arquivo
-                contentDescription = "Pokemon Logo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .graphicsLayer(alpha = 1.0f)
-                    .padding(16.dp)
-                    .height(150.dp),  // Ajuste o tamanho conforme necessário
-                contentScale = ContentScale.Fit
-            )
-
             // Imagem de fundo (pokébola) com opacidade reduzida
             Image(
                 painter = painterResource(id = R.drawable.pokebola),  // Substitua com o nome correto do seu arquivo
                 contentDescription = "Pokebola de fundo",
                 modifier = Modifier
                     .fillMaxSize()
-                    .graphicsLayer(alpha = 0.3f), // Define a opacidade
+                    .graphicsLayer(alpha = 0.7f), // Define a opacidade
                 contentScale = ContentScale.Crop  // Ajusta a imagem para cobrir toda a tela
+            )
+            Image(
+                painter = painterResource(id = R.drawable.pokemonlogo),  // Substitua com o nome correto do seu arquivo
+                contentDescription = "Pokemon Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(150.dp),  // Ajuste o tamanho conforme necessário
+                contentScale = ContentScale.Fit
             )
         }
 

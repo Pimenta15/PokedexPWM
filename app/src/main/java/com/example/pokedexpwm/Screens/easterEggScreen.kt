@@ -1,4 +1,4 @@
-package com.example.pokedexpwm
+package com.example.pokedexpwm.Screens
 
 
 import PokemonViewModel
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pokedexpwm.R
 
 @Composable
 fun easterEggScreen(navController: NavController, viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
