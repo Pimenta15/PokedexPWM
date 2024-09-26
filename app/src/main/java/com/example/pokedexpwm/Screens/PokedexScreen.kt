@@ -35,7 +35,7 @@ fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = an
         ) {
             // Imagem de fundo (pokébola) com opacidade reduzida
             Image(
-                painter = painterResource(id = R.drawable.pokebola),  // Substitua com o nome correto do seu arquivo
+                painter = painterResource(id = R.drawable.pokebola),
                 contentDescription = "Pokebola de fundo",
                 modifier = Modifier
                     .fillMaxSize()
@@ -43,7 +43,7 @@ fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = an
                 contentScale = ContentScale.Crop  // Ajusta a imagem para cobrir toda a tela
             )
             Image(
-                painter = painterResource(id = R.drawable.pokemonlogo),  // Substitua com o nome correto do seu arquivo
+                painter = painterResource(id = R.drawable.pokemonlogo),
                 contentDescription = "Pokemon Logo",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -63,9 +63,9 @@ fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = an
             Spacer(modifier = Modifier.height(50.dp))
         }
     } else {
-        // Imagem de fundo (pokébola) com opacidade reduzida
+
         Image(
-            painter = painterResource(id = R.drawable.pokebola),  // Substitua com o nome correto do seu arquivo
+            painter = painterResource(id = R.drawable.pokebola),
             contentDescription = "Pokebola de fundo",
             modifier = Modifier
                 .fillMaxSize()
@@ -80,16 +80,16 @@ fun PokedexScreen(navController: NavController, viewModel: PokemonViewModel = an
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Adiciona a logo como um item que ocupa toda a largura da tela
+
             item(span = { GridItemSpan(2) }) {
                 Image(
-                    painter = painterResource(id = R.drawable.pokemonlogo),  // Substitua com o nome correto do seu arquivo
+                    painter = painterResource(id = R.drawable.pokemonlogo),
                     contentDescription = "Pokemon Logo",
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             clickCount++
-                            if (clickCount == 10) {
+                            if (clickCount == 2) {
                                 clickCount = 0
                                 navController.navigate("easterEggScreen")  // Navega para a tela de Easter Egg
                             }
@@ -137,7 +137,7 @@ fun PokemonItem(pokemon: com.example.pokedexpwm.data.model.Pokemon, onClick: () 
                 contentScale = ContentScale.Fit
             )
 
-            // Nome do Pokémon com o número (#Número Nome)
+
             Text(
                 text = "# ${pokemon.id} \t ${pokemon.name.capitalize()}",
                 color = Color.White,

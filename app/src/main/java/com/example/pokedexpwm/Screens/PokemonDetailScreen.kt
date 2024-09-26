@@ -65,9 +65,9 @@ fun PokemonDetailScreen(navController: NavController, viewModel: PokemonViewMode
                             .graphicsLayer(alpha = 0.6f)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.seta), // Substitua com o ícone de seta apropriado
+                            painter = painterResource(id = R.drawable.seta),
                             contentDescription = "Voltar",
-                            tint = Color.Red // Cor branca para combinar com o layout
+                            tint = Color.Red
                         )
                     }
                     }
@@ -78,7 +78,7 @@ fun PokemonDetailScreen(navController: NavController, viewModel: PokemonViewMode
                     Image(
                         painter = painter,
                         contentDescription = null,
-                        modifier = Modifier.size(200.dp) // Ajuste o tamanho da imagem
+                        modifier = Modifier.size(200.dp)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
