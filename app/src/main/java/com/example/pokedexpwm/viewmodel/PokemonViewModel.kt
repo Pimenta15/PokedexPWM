@@ -29,7 +29,6 @@ class PokemonViewModel(private val pokemonDao: PokemonDao) : ViewModel() {
             // Tenta carregar os Pokémon do banco de dados
             try {
 
-
                 val cachedPokemon = pokemonDao.getAllPokemon()
 
                 if (cachedPokemon.isEmpty()|| cachedPokemon.size < limit) {
@@ -116,4 +115,20 @@ class PokemonViewModel(private val pokemonDao: PokemonDao) : ViewModel() {
     fun selectPokemon(pokemon: Pokemon) {
         selectedPokemon.value = pokemon
     }
+
+    fun getRandomPokemon(): Pokemon {
+        val pokemonList = this.pokemonList
+        return pokemonList.random()
+    }
+
+    fun getRandomIncorrectOptions(correctPokemonName: String): List<String> {
+        val pokemonList = this.pokemonList
+
+        // Filtra a lista de Pokémon para excluir o nome correto
+        val incorrectOptions = pokemonList.filter { it.name != correctPokemonName }
+
+        // Seleciona dois nomes aleatórios de Pokémon diferentes do correto
+        return incorrectOptions.shuffled().take(2).map { it.name }
+    }
+
 }
