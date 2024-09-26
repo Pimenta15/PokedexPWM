@@ -112,7 +112,7 @@ fun easterEggScreen(navController: NavController, viewModel: PokemonViewModel = 
             Image(
                 painter = painter,
                 contentDescription = null,
-                modifier = Modifier.size(350.dp),
+                modifier = Modifier.size(250.dp),
                 colorFilter = if (selectedOption.value == null) ColorFilter.tint(Color.Black) else null, // Aplica um filtro de cor preta se não revelado
                 contentScale = ContentScale.Fit
             )
