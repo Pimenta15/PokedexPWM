@@ -31,7 +31,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.pokedexpwm.R
 
 @Composable
-fun easterEggScreen(navController: NavController, viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun EasterEggScreen(navController: NavController, viewModel: PokemonViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     // Escolhendo um Pokémon aleatoriamente para o Easter Egg
     val randomPokemon = remember { viewModel.getRandomPokemon() }
     val selectedOption = remember { mutableStateOf<String?>(null) }

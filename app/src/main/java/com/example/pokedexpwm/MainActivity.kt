@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pokedexpwm.Screens.PokemonDetailScreen
 import com.example.pokedexpwm.viewmodel.PokemonViewModelFactory
-import easterEggScreen
+import EasterEggScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -46,7 +46,7 @@ fun PokedexApp(
             PokemonDetailScreen(navController,viewModel = viewModel)
         }
         composable("easterEggScreen") {
-            easterEggScreen(navController,viewModel = viewModel)
+            EasterEggScreen(navController,viewModel = viewModel)
         }
     }
 }
